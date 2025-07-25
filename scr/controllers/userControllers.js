@@ -1,0 +1,80 @@
+
+const { findUserByIdModel, updateUserModel, findUserByEmailModel, findUserByNameModel, findAllUserModel, insertUserModel, deleteUserModel } = require("../models/userModels");
+
+async function getAllUserController() {
+  const rows = await findAllUserModel();
+  if (rows.length === 0) {  
+    throw new Error("No users found");
+  }
+  
+  return rows;
+}
+
+async function getUserByNameController(userName) {
+  const [rows] = await findUserByNameModel(userName);
+  if (rows.length === 0) {
+    throw new Error("User not found");
+  }
+  return rows;
+}
+
+async function getUserByIdController(id) {   
+  console.log("Fetching user by ID:", id);
+  const [rows] = await findUserByIdModel(id);
+  
+  return rows;
+}
+
+async function createUserController(nombre, email, rolid, localidadid) {
+  const existingUser = await findUserByEmailModel(email);
+  if (existingUser.length > 0) {
+    throw new Error("User already exists with this email");
+  }
+  const result = await insertUserModel(nombre, email, rolid, localidadid);
+
+  if (result.affectedRows === 0) {
+    throw new Error("Failed to insert user");
+  } else {
+    // Devuelve el ID insertado
+    return {
+      id: result.insertId,
+      nombre,
+      email,
+    };
+  }
+}
+
+async function updateUserController({ id, nombre, email }) {
+  const existingUser = await findUserByIdModel(id);
+  if (existingUser.length === 0) throw new Error("Usuario no encontrado");
+
+  return await updateUserModel( id, nombre, email );
+}
+
+async function deleteUserController(id) {
+  const existingUser = await findUserByIdModel(id);
+  if (existingUser.length === 0) {  
+    throw new Error("User not found");
+  }
+  const result = await deleteUserModel(id); 
+  if (result.affectedRows === 0) {
+    throw new Error("Failed to delete user");
+  }else{
+    // Devuelve el ID eliminado
+    return {
+      id: result.insertId,
+      nombre: existingUser[0].nombres,
+      email: existingUser[0].email_user,
+    };
+  }
+
+
+}
+module.exports = {
+  createUserController,
+  getAllUserController,
+  getUserByNameController,
+  getUserByIdController,
+  updateUserController,
+  deleteUserController,
+};

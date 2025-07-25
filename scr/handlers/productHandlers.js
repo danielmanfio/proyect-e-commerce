@@ -12,7 +12,7 @@ const createProductHandler = (req, res) =>{
     res.send(`Creando un producto, nombre ${name} ${description} $${price}`);
 };
 
-const editProductHandler = (req,res) => {
+const updateProductHandler = (req,res) => {
     const {name} = req.query;
     res.send(`Modificando un producto, nombre ${name}`);
 }
@@ -26,5 +26,5 @@ module.exports = {
     getProductHandler, 
     getProductByIdHandler,
     createProductHandler, 
-    editProductHandler,
+    updateProductHandler,
     deleteProductHandler};
