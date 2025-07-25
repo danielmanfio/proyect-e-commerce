@@ -4,7 +4,7 @@ const { findUserByIdModel, updateUserModel, findUserByEmailModel, findUserByName
 async function getAllUserController() {
   const rows = await findAllUserModel();
   if (rows.length === 0) {  
-    throw new Error("No users found");
+    throw new Error("Usuarios no encontrados");
   }
   
   return rows;
@@ -13,13 +13,13 @@ async function getAllUserController() {
 async function getUserByNameController(userName) {
   const [rows] = await findUserByNameModel(userName);
   if (rows.length === 0) {
-    throw new Error("User not found");
+    throw new Error("Usuario no encontrado");
   }
   return rows;
 }
 
 async function getUserByIdController(id) {   
-  console.log("Fetching user by ID:", id);
+  
   const [rows] = await findUserByIdModel(id);
   
   return rows;
@@ -28,12 +28,12 @@ async function getUserByIdController(id) {
 async function createUserController(nombre, email, rolid, localidadid) {
   const existingUser = await findUserByEmailModel(email);
   if (existingUser.length > 0) {
-    throw new Error("User already exists with this email");
+    throw new Error("Email ya existe");
   }
   const result = await insertUserModel(nombre, email, rolid, localidadid);
 
   if (result.affectedRows === 0) {
-    throw new Error("Failed to insert user");
+    throw new Error("Error al crear el usuario");
   } else {
     // Devuelve el ID insertado
     return {
@@ -54,11 +54,11 @@ async function updateUserController({ id, nombre, email }) {
 async function deleteUserController(id) {
   const existingUser = await findUserByIdModel(id);
   if (existingUser.length === 0) {  
-    throw new Error("User not found");
+    throw new Error("Usuario no encontrado");
   }
   const result = await deleteUserModel(id); 
   if (result.affectedRows === 0) {
-    throw new Error("Failed to delete user");
+    throw new Error("Error al eliminar el usuario");
   }else{
     // Devuelve el ID eliminado
     return {
