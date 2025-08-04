@@ -18,7 +18,7 @@ async function getUserHandler(req, res) {
             return res.status(200).send(userByName);
         } catch (error) {
             console.error(error);
-            return res.status(500).send({ error: "Error interno del servidor", message: error.message  });
+            return res.status(500).send({ message: "Error interno del servidor",  });
         }
     }else{
 
@@ -44,13 +44,13 @@ async function getUserByIdHandler(req, res) {
     const usuarios = await getUserByIdController(id);
 
     if (!usuarios || usuarios.length === 0) {
-      return res.status(404).send({ error: "Usuario no encontrado" });
+      return res.status(404).send({ messahe: "Usuario no encontrado" });
     }
     
     return res.status(200).send(usuarios); 
   } catch (error) {
     
-    return res.status(500).send({ error: "Error del servidor", message: error.message});
+    return res.status(500).send({ message: "Error del servidor", message: error.message});
   }
 }
 
@@ -71,7 +71,7 @@ async function createUserHandler(req, res) {
 
   } catch (error) {
     console.error("Error en createUserHandler:", error);
-    return res.status(500).json({ error: "Error interno del servidor",message: error.message });
+    return res.status(500).json({ message: "Error interno del servidor"});
   }
 }
 
@@ -85,7 +85,7 @@ async function updateUserHandler(req, res) {
     const result = await updateUserController({ id, nombre, email });
     return res.status(200).json({ message: "Usuario actualizado", data: result });
   } catch (error) {
-    return res.status(400).json({ error: error.message });
+    return res.status(400).json({ message: error.message });
   }
 }
 
@@ -94,7 +94,7 @@ async function deleteUserHandler(req, res) {
     const { id } = req.params;
 
     if (!id || isNaN(id)) {
-      return res.status(400).json({ error: "ID inválido" });
+      return res.status(400).json({ message: "ID inválido" });
     }
 
     const eliminado = await deleteUserController(id);
@@ -103,11 +103,11 @@ async function deleteUserHandler(req, res) {
       return res.status(404).json({ error: "Usuario no encontrado" });
     }
 
-    return res.status(200).json({ mensaje: "Usuario eliminado correctamente" });
+    return res.status(200).json({ message: "Usuario eliminado correctamente" });
 
   } catch (error) {
     console.error("Error en deleteUserHandler:", error);
-    return res.status(500).json({ error: "Error interno del servidor" });
+    return res.status(500).json({ message: "Error interno del servidor" });
   }
 }
 
