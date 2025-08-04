@@ -21,7 +21,9 @@ async function getUserByNameController(userName) {
 async function getUserByIdController(id) {   
   
   const [rows] = await findUserByIdModel(id);
-  
+   if (rows.length === 0) {
+    throw new Error("Usuario no encontrado");
+  }
   return rows;
 }
 
